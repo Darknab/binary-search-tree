@@ -111,6 +111,18 @@ class Tree
     end
   end
 
+  def level_order(node = @root, queue = [node], order = [])
+    
+    while queue.length != 0
+      yield queue[0] if block_given?
+      order.push(queue[0].value)
+      queue.push(queue[0].left_child) if queue[0].left_child
+      queue.push(queue[0].right_child) if queue[0].right_child
+      queue.delete_at(0)
+    end
+    return order
+  end
+
   private
 
   def minimum_node(node = @root)
@@ -143,4 +155,7 @@ tree = Tree.new(sorted_arr)
 
 tree.pretty_print
 
+puts tree.level_order
+
+puts tree.level_order {|element| element.value *= 2}
 
