@@ -74,31 +74,13 @@ class Tree
     end
   end
 
-  def find(element, node = @root)
-    return false if !node
-    if element == node.value
-      return node
-    elsif element > node.value
-      if root.right_child
-        find(element, node.right_child)
-      else return false
-      end
-    else 
-      if root.left_child
-        find(element, node.left_child)
-      else return false
-      end
-    end
-  end
-
   def delete(element)
-    if !self.find(element)
+    if !self.search(element)
       puts "#{element} is not in the tree"
       return
-    else node = self.find(element)
+    else node = self.search(element)
     end
     parent = node.parent
-    #binding.pry
     if !node.right_child && !node.left_child
       parent.left_child = nil if parent.value > node.value
       parent.right_child = nil if parent.value < node.value
@@ -113,8 +95,20 @@ class Tree
       self.delete(minimum.value)
       node.value = minimum.value
     end
+  end
 
-
+  def find(element)
+    result = self.search(element)
+    if result == false
+      puts "#{element} is not in the tree"
+    else
+      message = "#{result.value} found, "
+      message += "parent: #{result.parent.value} " if result.parent
+      message += "left child: #{result.left_child.value} " if result.left_child
+      message += "right child: #{result.right_child.value}" if result.right_child
+      message += "."
+      puts message
+    end
   end
 
   private
@@ -125,14 +119,27 @@ class Tree
     else return node
     end
   end
+
+  def search(element, node = @root)
+    return false if !node
+    if element == node.value
+      return node
+    elsif element > node.value
+      if root.right_child
+        search(element, node.right_child)
+      else return false
+      end
+    else 
+      if root.left_child
+        search(element, node.left_child)
+      else return false
+      end
+    end
+  end
 end
 
+
 tree = Tree.new(sorted_arr)
-
-tree.pretty_print
-
-
-tree.delete(8)
 
 tree.pretty_print
 
