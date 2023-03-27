@@ -112,7 +112,6 @@ class Tree
   end
 
   def level_order(node = @root, queue = [node], order = [])
-    
     while queue.length != 0
       yield queue[0] if block_given?
       order.push(queue[0].value)
@@ -121,6 +120,36 @@ class Tree
       queue.delete_at(0)
     end
     return order
+  end
+
+  def inorder(node = @root, order = [])
+    self.inorder(node.left_child, order) if node.left_child
+    order.push(node.value)
+    self.inorder(node.right_child, order) if node.right_child
+    if block_given?
+      order.map {|val| yield val}
+    else order
+    end
+  end
+
+  def preorder(node = @root, order = [])
+    order.push(node.value)
+    self.preorder(node.left_child, order) if node.left_child
+    self.preorder(node.right_child, order) if node.right_child
+    if block_given?
+      order.map {|val| yield val}
+    else order
+    end
+  end
+
+  def postorder(node = @root, order = [])
+    self.postorder(node.left_child, order) if node.left_child
+    self.postorder(node.right_child, order) if node.right_child
+    order.push(node.value)
+    if block_given?
+      order.map {|val| yield val}
+    else order
+    end
   end
 
   private
@@ -154,8 +183,4 @@ end
 tree = Tree.new(sorted_arr)
 
 tree.pretty_print
-
-puts tree.level_order
-
-puts tree.level_order {|element| element.value *= 2}
 
