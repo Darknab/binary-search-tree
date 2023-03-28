@@ -122,34 +122,28 @@ class Tree
     return order
   end
 
-  def inorder(node = @root, order = [])
-    self.inorder(node.left_child, order) if node.left_child
+  def inorder(node = @root, order = [], &block)
+    self.inorder(node.left_child, order, &block) if node.left_child
+    yield node if block_given?
     order.push(node.value)
-    self.inorder(node.right_child, order) if node.right_child
-    if block_given?
-      order.map {|val| yield val}
-    else order
-    end
+    self.inorder(node.right_child, order, &block) if node.right_child
+    order
   end
 
-  def preorder(node = @root, order = [])
+  def preorder(node = @root, order = [], &block)
+    yield node if block_given?
     order.push(node.value)
-    self.preorder(node.left_child, order) if node.left_child
-    self.preorder(node.right_child, order) if node.right_child
-    if block_given?
-      order.map {|val| yield val}
-    else order
-    end
+    self.preorder(node.left_child, order, &block) if node.left_child
+    self.preorder(node.right_child, order, &block) if node.right_child
+    order
   end
 
-  def postorder(node = @root, order = [])
-    self.postorder(node.left_child, order) if node.left_child
-    self.postorder(node.right_child, order) if node.right_child
+  def postorder(node = @root, order = [], &block)
+    self.postorder(node.left_child, order, &block) if node.left_child
+    self.postorder(node.right_child, order, &block) if node.right_child
+    yield node if block_given?
     order.push(node.value)
-    if block_given?
-      order.map {|val| yield val}
-    else order
-    end
+    order
   end
 
   private
@@ -183,4 +177,8 @@ end
 tree = Tree.new(sorted_arr)
 
 tree.pretty_print
+
+p tree.inorder
+p tree.postorder
+p tree.preorder
 
