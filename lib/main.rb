@@ -4,6 +4,13 @@ require_relative 'merge-sort.rb'
 arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 
 sorted_arr = merge_sort(arr).uniq
+def max(a, b)
+  if a > b
+    a
+  else
+    b
+  end
+end
 
 class Node
   #attr_reader :value
@@ -146,6 +153,12 @@ class Tree
     order
   end
 
+  def height(value)
+    node = search(value)
+    return "#{value} is not an element of the tree!" if !node
+    height_node(node, 1, 1)
+  end
+
   private
 
   def minimum_node(node = @root)
@@ -171,6 +184,21 @@ class Tree
       end
     end
   end
+
+  def height_node(node, left, right)
+    if node.left_child
+      left = height_node(node.left_child, left, right) + 1
+    else
+      left = 1
+    end
+    if node.right_child
+      right = height_node(node.right_child, left, right) + 1
+    else
+      right = 1
+    end
+    return max(left, right)
+  end
+
 end
 
 
@@ -178,7 +206,4 @@ tree = Tree.new(sorted_arr)
 
 tree.pretty_print
 
-p tree.inorder
-p tree.postorder
-p tree.preorder
 
