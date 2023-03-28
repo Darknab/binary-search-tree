@@ -159,6 +159,12 @@ class Tree
     height_node(node, 1, 1)
   end
 
+  def depth(value)
+    node = search(value)
+    return "#{value} is not an element of the tree!" if !node
+    depth_node(node)
+  end
+
   private
 
   def minimum_node(node = @root)
@@ -199,6 +205,15 @@ class Tree
     return max(left, right)
   end
 
+  def depth_node(node)
+    if node.parent
+      depth = depth_node(node.parent) + 1
+    else
+      depth = 1
+    end
+    depth
+  end
+
 end
 
 
@@ -206,4 +221,4 @@ tree = Tree.new(sorted_arr)
 
 tree.pretty_print
 
-
+p tree.depth(8)
