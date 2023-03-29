@@ -65,7 +65,7 @@ class Tree
       else
         root.right_child = Node.new(element)
         root.right_child.parent = root
-        puts "#{element} was successfully added to the tree!"
+        puts "#{element} has been successfully added to the tree!"
         return
       end
     elsif element < root.value
@@ -74,7 +74,7 @@ class Tree
       else
         root.left_child = Node.new(element)
         root.left_child.parent = root
-        puts "#{element} was successfully added to the tree!"
+        puts "#{element} has been successfully added to the tree!"
         return
       end
     else puts "#{element} is already in the list!"
@@ -156,13 +156,22 @@ class Tree
   def height(value)
     node = search(value)
     return "#{value} is not an element of the tree!" if !node
-    height_node(node, 1, 1)
+    height_node(node)
   end
 
   def depth(value)
     node = search(value)
     return "#{value} is not an element of the tree!" if !node
     depth_node(node)
+  end
+
+  def balanced?
+    result = true
+    self.level_order do |node|  
+       result = false if !node_balanced?(node)
+       result
+    end
+    result  
   end
 
   private
@@ -191,14 +200,14 @@ class Tree
     end
   end
 
-  def height_node(node, left, right)
+  def height_node(node)
     if node.left_child
-      left = height_node(node.left_child, left, right) + 1
+      left = height_node(node.left_child) + 1
     else
       left = 1
     end
     if node.right_child
-      right = height_node(node.right_child, left, right) + 1
+      right = height_node(node.right_child) + 1
     else
       right = 1
     end
@@ -214,6 +223,24 @@ class Tree
     depth
   end
 
+  def node_balanced?(node)
+    result = true
+    if node.left_child
+      height_left = height_node(node.left_child)
+    else
+      height_left = 0
+    end
+
+    if node.right_child
+      height_right = height_node(node.right_child)
+    else
+      height_right = 0
+    end
+
+    result = false if (height_left - height_right).abs > 1
+
+    return result
+  end
 end
 
 
@@ -221,4 +248,12 @@ tree = Tree.new(sorted_arr)
 
 tree.pretty_print
 
-p tree.depth(8)
+
+
+tree.pretty_print
+
+
+p tree.balanced?
+
+p tree.inorder
+
