@@ -1,22 +1,22 @@
 def merge_sort(array)
   n = array.length
-  if n < 2
-    return  array
-  else
-    if n % 2 != 0
-      half = (n - 1) / 2
-    else half = n / 2
-    end
-    first_half = merge_sort(array.slice(0, half))
-    second_half = merge_sort(array.slice(half, n + 1))
+  return array if n < 2
+
+  half = if n.odd?
+           (n - 1) / 2
+         else
+           n / 2
+         end
+  first_half = merge_sort(array.slice(0, half))
+  second_half = merge_sort(array.slice(half, n + 1))
   result = []
-  end
+
   loop do
     if !first_half || first_half.empty?
       result << second_half
       break
     elsif !second_half || second_half.empty?
-      result << first_half 
+      result << first_half
       break
     end
     if first_half[0] < second_half[0]
@@ -25,7 +25,7 @@ def merge_sort(array)
     else
       result << second_half[0]
       second_half.delete_at(0)
-    end 
+    end
   end
   result.flatten
 end
