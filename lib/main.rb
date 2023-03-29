@@ -13,7 +13,6 @@ def max(a, b)
 end
 
 class Node
-  #attr_reader :value
   attr_accessor :left_child, :right_child, :parent, :value
   
   def initialize(value = nil, left_child = nil, right_child = nil, parent = nil)
@@ -174,6 +173,12 @@ class Tree
     result  
   end
 
+  def rebalance
+    puts "tree is already balanced" if self.balanced?
+    ordered = self.inorder
+    @root = self.build_tree(ordered)
+  end
+
   private
 
   def minimum_node(node = @root)
@@ -248,12 +253,18 @@ tree = Tree.new(sorted_arr)
 
 tree.pretty_print
 
-
+tree.insert(35)
+tree.insert(42)
+tree.insert(2)
+tree.insert(12)
+tree.insert(112)
 
 tree.pretty_print
 
 
 p tree.balanced?
 
-p tree.inorder
+tree.rebalance
+
+tree.pretty_print
 
